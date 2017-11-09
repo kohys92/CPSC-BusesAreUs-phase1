@@ -2,6 +2,7 @@ package ca.ubc.cs.cpsc210.translink.model;
 
 import ca.ubc.cs.cpsc210.translink.model.exception.StopException;
 import ca.ubc.cs.cpsc210.translink.util.LatLon;
+import ca.ubc.cs.cpsc210.translink.util.SphericalGeometry;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,6 +23,7 @@ public class StopManager implements Iterable<Stop> {
     // Do not change this field or its type, as the iterator method depends on it
     private Map<Integer, Stop> stopMap;
     private Stop selectedStop;
+    private LatLon locn;
 
     /**
      * Constructs stop manager with empty collection of stops and null as the selected stop
@@ -61,7 +63,13 @@ public class StopManager implements Iterable<Stop> {
      * @return  stop with given number
      */
     public Stop getStopWithNumber(int number) {
-        return null;
+        if(stopMap.containsKey(number))
+            return stopMap.get(number);
+        else
+            locn = new LatLon(49.2827291, -123.1207375);
+            Stop newStop = new Stop(number, " ", locn);
+            stopMap.put(number, newStop);
+            return newStop;
     }
 
     /**
@@ -75,7 +83,15 @@ public class StopManager implements Iterable<Stop> {
      * @return  stop with given number
      */
     public Stop getStopWithNumber(int number, String name, LatLon locn) {
-        return null;
+        if(stopMap.containsKey(number)) {
+            stopMap.get(number).setName(name);
+            stopMap.get(number).setLocn(locn);
+            return stopMap.get(number);
+        }else {
+            Stop newStop = new Stop(number, name, locn);
+            stopMap.put(number, newStop);
+            return newStop;
+        }
     }
 
     /**
@@ -85,14 +101,17 @@ public class StopManager implements Iterable<Stop> {
      * @throws StopException when stop manager doesn't contain selected stop
      */
     public void setSelected(Stop selected) throws StopException {
-        throw new StopException("No such stop: " + selected.getNumber() + " " + selected.getName());
+        if(!stopMap.containsValue(selected))
+            throw new StopException("No such stop: " + selected.getNumber() + " " + selected.getName());
+        else
+            this.selectedStop = selected;
     }
 
     /**
      * Clear selected stop (selected stop is null)
      */
     public void clearSelectedStop() {
-
+        selectedStop = null;
     }
 
     /**
@@ -101,14 +120,14 @@ public class StopManager implements Iterable<Stop> {
      * @return  number of stops added to manager
      */
     public int getNumStops() {
-        return 0;  // stub
+        return stopMap.values().size();
     }
 
     /**
      * Remove all stops from stop manager
      */
     public void clearStops() {
-
+        stopMap.clear();
     }
 
     /**
@@ -118,8 +137,17 @@ public class StopManager implements Iterable<Stop> {
      * @return    stop closest to pt but less than RADIUS away; null if no stop is within RADIUS metres of pt
      */
     public Stop findNearestTo(LatLon pt) {
+        Stop nearStop = null;
+        double radius = RADIUS;
 
-        return null;  // stub
+        for(Stop next : stopMap.values()) {
+            double distance = SphericalGeometry.distanceBetween(next.getLocn(), pt);
+            if(distance < radius) {
+                radius = distance;
+                nearStop = next;
+            }
+        }
+        return nearStop;
     }
 
     @Override

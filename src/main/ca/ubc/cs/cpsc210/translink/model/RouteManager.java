@@ -21,7 +21,7 @@ public class RouteManager implements Iterable<Route> {
      * Constructs Route manager with empty collection of routes
      */
     private RouteManager() {
-
+        routeMap = new HashMap<>();
     }
 
     /**
@@ -46,8 +46,14 @@ public class RouteManager implements Iterable<Route> {
      * @return  route with given number
      */
     public Route getRouteWithNumber(String number) {
-
-        return null;  // stub
+        if (routeMap.containsKey(number)) {
+            return routeMap.get(number);
+        } else {
+            Route nRoute = new Route(number);
+            nRoute.setName("");
+            routeMap.put(number, nRoute);
+            return nRoute;  // stub
+        }
     }
 
     /**
@@ -59,7 +65,15 @@ public class RouteManager implements Iterable<Route> {
      * @return  route with given number and name
      */
     public Route getRouteWithNumber(String number, String name) {
-        return null;
+        if (routeMap.containsKey(number)) {
+            routeMap.get(number).setName(name);
+            return routeMap.get(number);
+        } else {
+            Route nRoute = new Route(number);
+            nRoute.setName(name);
+            routeMap.put(number, nRoute);
+            return nRoute;  // stub
+        }
     }
 
     /**
@@ -68,7 +82,7 @@ public class RouteManager implements Iterable<Route> {
      * @return  number of routes added to manager
      */
     public int getNumRoutes() {
-        return 0;  // stub
+        return routeMap.size();
     }
 
     @Override
@@ -81,6 +95,6 @@ public class RouteManager implements Iterable<Route> {
      * Remove all routes from the route manager
      */
     public void clearRoutes() {
-
+        routeMap.clear();
     }
 }
