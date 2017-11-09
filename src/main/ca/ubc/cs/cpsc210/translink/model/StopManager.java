@@ -3,6 +3,7 @@ package ca.ubc.cs.cpsc210.translink.model;
 import ca.ubc.cs.cpsc210.translink.model.exception.StopException;
 import ca.ubc.cs.cpsc210.translink.util.LatLon;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -20,12 +21,14 @@ public class StopManager implements Iterable<Stop> {
     // Use this field to hold all of the stops.
     // Do not change this field or its type, as the iterator method depends on it
     private Map<Integer, Stop> stopMap;
+    private Stop selectedStop;
 
     /**
      * Constructs stop manager with empty collection of stops and null as the selected stop
      */
     private StopManager() {
-
+        stopMap = new HashMap<>();
+        selectedStop = null;
     }
 
     /**
@@ -43,7 +46,7 @@ public class StopManager implements Iterable<Stop> {
     }
 
     public Stop getSelected() {
-        return null;
+        return selectedStop;
     }
 
     /**
@@ -58,7 +61,7 @@ public class StopManager implements Iterable<Stop> {
      * @return  stop with given number
      */
     public Stop getStopWithNumber(int number) {
-        return null;
+        return ;
     }
 
     /**

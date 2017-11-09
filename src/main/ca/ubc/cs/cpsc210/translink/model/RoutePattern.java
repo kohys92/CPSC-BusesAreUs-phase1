@@ -2,6 +2,7 @@ package ca.ubc.cs.cpsc210.translink.model;
 
 import ca.ubc.cs.cpsc210.translink.util.LatLon;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,6 +14,12 @@ import java.util.List;
 
 public class RoutePattern {
 
+    private String name;
+    private String destination;
+    private String direction;
+    private Route route;
+    private List<LatLon> path;
+
     /**
      * Construct a new RoutePattern with the given information
      * @param name          the name of the pattern
@@ -21,7 +28,10 @@ public class RoutePattern {
      * @param route         the Route of which this is a pattern
      */
     public RoutePattern(String name, String destination, String direction, Route route) {
-
+        this.name = name;
+        this.destination = destination;
+        this.direction = direction;
+        this.route = route;
     }
 
     /**
@@ -29,7 +39,7 @@ public class RoutePattern {
      * @return      the name
      */
     public String getName() {
-        return null;
+        return name;
     }
 
     /**
@@ -37,7 +47,7 @@ public class RoutePattern {
      * @return      the destination
      */
     public String getDestination() {
-        return null;
+        return destination;
     }
 
     /**
@@ -45,24 +55,22 @@ public class RoutePattern {
      * @return      the direction
      */
     public String getDirection() {
-        return null;
+        return direction;
     }
 
-    /**
-     * Decide if two RoutePatterns are equal. Two route patterns are equal if their names are equal.
-     * @param o         the other route pattern to compare to
-     * @return          true if this is equal to o
-     */
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        RoutePattern that = (RoutePattern) o;
+
+        return name != null ? name.equals(that.name) : that.name == null;
     }
 
     @Override
     public int hashCode() {
-
-        return 1;
+        return name != null ? name.hashCode() : 0;
     }
 
     /**
@@ -70,7 +78,7 @@ public class RoutePattern {
      * @param path      the path
      */
     public void setPath(List<LatLon> path) {
-
+        this.path = path;
     }
 
     /**
@@ -79,7 +87,7 @@ public class RoutePattern {
      * @return      an unmodifiable list of the coordinates on this route pattern
      */
     public List<LatLon> getPath() {
-        return null;
+        return Collections.unmodifiableList(path);
     }
 
     /**
@@ -87,7 +95,7 @@ public class RoutePattern {
      * @param direction     the direction
      */
     public void setDirection(String direction) {
-
+        this.direction = direction;
     }
 
     /**
@@ -95,6 +103,6 @@ public class RoutePattern {
      * @param destination     the destination
      */
     public void setDestination(String destination) {
-
+        this.destination = destination;
     }
 }

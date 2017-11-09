@@ -15,6 +15,10 @@ import java.util.List;
 
 public class Route implements Iterable<Stop> {
     private List<Stop> stops;
+    private List<RoutePattern> routePatterns;
+    private String number;
+    private String name;
+
 
     /**
      * Constructs a route with given number.
@@ -23,7 +27,9 @@ public class Route implements Iterable<Stop> {
      * @param number the route number
      */
     public Route(String number) {
-
+        this.number = number;
+        stops = new ArrayList<>();
+        routePatterns = new ArrayList<>();
     }
 
     /**
@@ -32,7 +38,7 @@ public class Route implements Iterable<Stop> {
      * @return the route number
      */
     public String getNumber() {
-        return null;
+        return number;
     }
 
     /**
@@ -40,7 +46,7 @@ public class Route implements Iterable<Stop> {
      * @param name  The name of the route
      */
     public void setName(String name) {
-
+        this.name = name;
     }
 
     /**
@@ -49,7 +55,8 @@ public class Route implements Iterable<Stop> {
      * @param pattern
      */
     public void addPattern(RoutePattern pattern) {
-
+        if(!routePatterns.equals(pattern))
+            routePatterns.add(pattern);
     }
 
     /**
@@ -58,7 +65,9 @@ public class Route implements Iterable<Stop> {
      * @param stop the stop to add to this route
      */
     public void addStop(Stop stop) {
-
+        if(!stops.contains(stop))
+            stops.add(stop);
+            stop.addRoute(this);
     }
 
     /**
@@ -67,7 +76,9 @@ public class Route implements Iterable<Stop> {
      * @param stop the stop to remove from this route
      */
     public void removeStop(Stop stop) {
-
+        if(stops.contains(stop));
+            stops.remove(stop);
+            stop.removeRoute(this);
     }
 
     /**
@@ -76,7 +87,7 @@ public class Route implements Iterable<Stop> {
      * @return      An unmodifiable list of all the stops
      */
     public List<Stop> getStops() {
-        return null;
+        return Collections.unmodifiableList(stops);
     }
 
     /**
@@ -86,24 +97,25 @@ public class Route implements Iterable<Stop> {
      * @return true if route has a stop at given stop
      */
     public boolean hasStop(Stop stop) {
-        return false;
+        if(stops.contains(stop))
+            return true;
+        else
+            return false;
     }
 
-    /**
-     * Two routes are equal if their numbers are equal
-     */
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Route stops = (Route) o;
+
+        return number != null ? number.equals(stops.number) : stops.number == null;
     }
 
-    /**
-     * Two routes are equal if their numbers are equal.
-     * Therefore hashCode only pays attention to number.
-     */
     @Override
     public int hashCode() {
-        return 1;
+        return number != null ? number.hashCode() : 0;
     }
 
     @Override
@@ -118,7 +130,7 @@ public class Route implements Iterable<Stop> {
      * @return      the name of the route
      */
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
@@ -136,7 +148,19 @@ public class Route implements Iterable<Stop> {
      * @return                  the pattern with the given name
      */
     public RoutePattern getPattern(String patternName, String destination, String direction) {
-        return null;
+        RoutePattern newRP = new RoutePattern(patternName, destination,direction,this);
+        for(RoutePattern next : routePatterns) {
+            if(next.getName().equals(patternName)) {
+                next.setDestination(destination);
+                next.setDirection(direction);
+                newRP = next;
+            }
+        }
+        if(!routePatterns.contains(newRP))
+            routePatterns.add(newRP);
+
+        return newRP;
+
     }
 
     /**
@@ -147,7 +171,14 @@ public class Route implements Iterable<Stop> {
      * @return                  the pattern with the given name
      */
     public RoutePattern getPattern(String patternName) {
-        return null;
+        RoutePattern newRP = new RoutePattern(patternName, "", "", this);
+        for(RoutePattern next : routePatterns) {
+            newRP = next;
+        }
+        if(!routePatterns.contains(newRP)) {
+            routePatterns.add(newRP);
+        }
+        return  newRP;
     }
 
     /**
@@ -156,6 +187,6 @@ public class Route implements Iterable<Stop> {
      * @return      an unmodifiable list of the patterns for this route
      */
     public List<RoutePattern> getPatterns() {
-        return null;
+        return Collections.unmodifiableList(routePatterns);
     }
 }
