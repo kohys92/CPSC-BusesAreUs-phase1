@@ -61,7 +61,7 @@ public class StopManager implements Iterable<Stop> {
      * @return  stop with given number
      */
     public Stop getStopWithNumber(int number) {
-        return ;
+        return null;
     }
 
     /**
