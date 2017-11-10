@@ -1,7 +1,13 @@
 package ca.ubc.cs.cpsc210.translink.parsers;
 
+import ca.ubc.cs.cpsc210.translink.model.Bus;
+import ca.ubc.cs.cpsc210.translink.model.Route;
+import ca.ubc.cs.cpsc210.translink.model.RouteManager;
 import ca.ubc.cs.cpsc210.translink.model.Stop;
+import ca.ubc.cs.cpsc210.translink.model.exception.RouteException;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 // Parser for bus data
 public class BusParser {
@@ -21,7 +27,31 @@ public class BusParser {
      *     <li>JSON response is not a JSON array</li>
      * </ul>
      */
+
     public static void parseBuses(Stop stop, String jsonResponse) throws JSONException {
         // TODO: implement this method
+        JSONArray jsonArray = new JSONArray(jsonResponse);
+        for(int i = 0; i < jsonArray.length(); i++) {
+            JSONObject json = jsonArray.getJSONObject(i);
+            if(json.has("RouteNo") && json.has("Latitude") && json.has("Longitude")
+                    && json.has("Destination") && json.has("RecordedTime")) {
+                try {
+                    Route route = RouteManager.getInstance().getRouteWithNumber(json.getString("RouteNo"));
+                    stop.addRoute(route);
+                    stop.addBus(newBus(json));
+                }catch(RouteException e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+    }
+
+    private static Bus newBus(JSONObject obj) throws JSONException{
+        Route route = RouteManager.getInstance().getRouteWithNumber(obj.getString("RouteNo"));
+        double lat = obj.getDouble("Latitude");
+        double lon = obj.getDouble("Longitude");
+        String dest = obj.getString("Destination");
+        String time = obj.getString("RecordedTime");
+        return new Bus(route, lat, lon, dest, time);
     }
 }

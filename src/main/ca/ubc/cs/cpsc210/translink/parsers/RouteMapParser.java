@@ -52,16 +52,16 @@ public class RouteMapParser {
      *            route number.
      */
     private void parseOnePattern(String str) {
-        String[] info = str.split(";");
+        String[] data = str.split(";");
         // NOTE: split(regex, limit) because PatternName may contain "-"
-        String[] routeAndPattern = info[0].substring(1).split("-", 2);
+        String[] routeAndPattern = data[0].substring(1).split("-", 2);
         String routeNo = routeAndPattern[0];
         String patternName = routeAndPattern[1];
 
         List<LatLon> elements = new ArrayList<>();
 
-        for (int i = 1; i < info.length; i = i + 2) {
-            LatLon latlon = new LatLon(Double.parseDouble(info[i]), Double.parseDouble(info[i + 1]));
+        for (int i = 1; i < data.length; i = i + 2) {
+            LatLon latlon = new LatLon(Double.parseDouble(data[i]), Double.parseDouble(data[i + 1]));
             elements.add(latlon);
         }
         storeRouteMap(routeNo, patternName, elements);

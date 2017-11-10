@@ -38,4 +38,9 @@ public class RouteMapParserTest {
         p.parse();
         assertEquals(1232, countNumRoutePatterns());
     }
+
+    @Test
+    public void testRouteParserIOException() {
+        RouteMapParser p = new RouteMapParser("WrongFile.txt");
+    }
 }

@@ -26,7 +26,7 @@ public class Bus {
         this.dest = dest;
         this.time = time;
 
-        latlon = new LatLon(lat, lon);
+        this.latlon = new LatLon(lat,lon);
 
     }
 

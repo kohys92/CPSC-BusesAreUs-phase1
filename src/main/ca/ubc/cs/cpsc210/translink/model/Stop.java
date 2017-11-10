@@ -24,13 +24,14 @@ public class Stop implements Iterable<Arrival> {
      * Constructs a stop with given number, name and location.
      * Set of routes and list of arrivals are empty.
      *
-     * @param number    the number of this stop
-     * @param name      name of this stop
-     * @param locn      location of this stop
+     * @param number the number of this stop
+     * @param name   name of this stop
+     * @param locn   location of this stop
      */
     public Stop(int number, String name, LatLon locn) {
         arrivals = new ArrayList<>();
         routes = new HashSet<>();
+        buses = new ArrayList<>();
         this.number = number;
         this.name = name;
         this.locn = locn;
@@ -38,7 +39,8 @@ public class Stop implements Iterable<Arrival> {
 
     /**
      * getter for name
-     * @return      the name
+     *
+     * @return the name
      */
     public String getName() {
         return name;
@@ -46,7 +48,8 @@ public class Stop implements Iterable<Arrival> {
 
     /**
      * getter for locn
-     * @return      the location
+     *
+     * @return the location
      */
     public LatLon getLocn() {
         return locn;
@@ -54,7 +57,8 @@ public class Stop implements Iterable<Arrival> {
 
     /**
      * getter for number
-     * @return      the number
+     *
+     * @return the number
      */
     public int getNumber() {
         return number;
@@ -62,7 +66,8 @@ public class Stop implements Iterable<Arrival> {
 
     /**
      * getter for set of routes
-     * @return      an unmodifiable set of routes using this stop
+     *
+     * @return an unmodifiable set of routes using this stop
      */
     public Set<Route> getRoutes() {
         return Collections.unmodifiableSet(routes);
@@ -71,12 +76,14 @@ public class Stop implements Iterable<Arrival> {
     /**
      * Add route to set of routes with stops at this stop.
      *
-     * @param route  the route to add
+     * @param route the route to add
      */
     public void addRoute(Route route) {
-        if(!routes.contains(route))
-        routes.add(route);
-        route.addStop(this);
+        if (!routes.contains(route)) {
+            routes.add(route);
+
+            route.addStop(this);
+        }
     }
 
     /**
@@ -85,15 +92,17 @@ public class Stop implements Iterable<Arrival> {
      * @param route the route to remove
      */
     public void removeRoute(Route route) {
-        if(!routes.contains(route))
-        routes.remove(route);
+        if (routes.contains(route))
+            routes.remove(route);
         route.removeStop(this);
+
     }
 
     /**
      * Determine if this stop is on a given route
-     * @param route  the route
-     * @return  true if this stop is on given route
+     *
+     * @param route the route
+     * @return true if this stop is on given route
      */
     public boolean onRoute(Route route) {
         return route.hasStop(this);
@@ -103,11 +112,11 @@ public class Stop implements Iterable<Arrival> {
      * Add bus arrival travelling on a particular route at this stop.
      * Arrivals are to be sorted in order by arrival time
      *
-     * @param arrival  the bus arrival to add to stop
+     * @param arrival the bus arrival to add to stop
      */
     public void addArrival(Arrival arrival) {
-        Collections.sort(arrivals);
         arrivals.add(arrival);
+        Collections.sort(arrivals);
     }
 
     /**
@@ -119,23 +128,22 @@ public class Stop implements Iterable<Arrival> {
 
     /**
      * Adds bus that is on a route passing through this stop
-     * @param bus  bus to add
+     *
+     * @param bus bus to add
      * @throws RouteException if bus is not on a route on which this stop lies
      */
     public void addBus(Bus bus) throws RouteException {
-        buses = new ArrayList<>();
-        if(bus.getRoute().equals(routes)){
-            buses.add(bus);
-        }else{
-            throw new RouteException("No buses on the routes through this stop!");
-        }
+        if (!onRoute(bus.getRoute()))
+            throw new RouteException("Bus is not on a route on which this stop lies");
 
+        buses.add(bus);
 
     }
 
     /**
      * Get unmodifiable list of buses on routes serving this stop
-     * @return  unmodifiable list of buses
+     *
+     * @return unmodifiable list of buses
      */
     public List<Bus> getBuses() {
         return Collections.unmodifiableList(buses);
@@ -172,7 +180,7 @@ public class Stop implements Iterable<Arrival> {
     /**
      * setter for name
      *
-     * @param name      the new name
+     * @param name the new name
      */
     public void setName(String name) {
         this.name = name;
@@ -180,7 +188,8 @@ public class Stop implements Iterable<Arrival> {
 
     /**
      * setter for location
-     * @param locn      the new location
+     *
+     * @param locn the new location
      */
     public void setLocn(LatLon locn) {
         this.locn = locn;

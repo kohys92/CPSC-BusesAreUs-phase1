@@ -3,6 +3,10 @@ package ca.ubc.cs.cpsc210.translink.tests.parsers;
 import ca.ubc.cs.cpsc210.translink.model.Stop;
 import ca.ubc.cs.cpsc210.translink.model.StopManager;
 import ca.ubc.cs.cpsc210.translink.parsers.BusParser;
+import ca.ubc.cs.cpsc210.translink.parsers.RouteParser;
+import ca.ubc.cs.cpsc210.translink.parsers.StopParser;
+import ca.ubc.cs.cpsc210.translink.parsers.exception.RouteDataMissingException;
+import ca.ubc.cs.cpsc210.translink.parsers.exception.StopDataMissingException;
 import ca.ubc.cs.cpsc210.translink.providers.FileDataProvider;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -13,10 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BusParserTest {
     @Test
-    public void testBusLocationsParserNormal() throws JSONException {
+    public void testBusLocationsParserNormal() throws JSONException, IOException, StopDataMissingException, RouteDataMissingException {
         Stop s = StopManager.getInstance().getStopWithNumber(51479);
         s.clearBuses();
         String data = "";
+
+        StopParser p = new StopParser("stops.json");
+        p.parse();
+
+        RouteParser rp = new RouteParser("allroutes.json");
+        rp.parse();
 
         try {
             data = new FileDataProvider("buslocations.json").dataSourceToString();

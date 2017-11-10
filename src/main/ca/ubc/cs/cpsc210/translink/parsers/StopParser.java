@@ -1,9 +1,16 @@
 package ca.ubc.cs.cpsc210.translink.parsers;
 
+import ca.ubc.cs.cpsc210.translink.model.Route;
+import ca.ubc.cs.cpsc210.translink.model.RouteManager;
+import ca.ubc.cs.cpsc210.translink.model.Stop;
+import ca.ubc.cs.cpsc210.translink.model.StopManager;
 import ca.ubc.cs.cpsc210.translink.parsers.exception.StopDataMissingException;
 import ca.ubc.cs.cpsc210.translink.providers.DataProvider;
 import ca.ubc.cs.cpsc210.translink.providers.FileDataProvider;
+import ca.ubc.cs.cpsc210.translink.util.LatLon;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -47,5 +54,33 @@ public class StopParser {
     public void parseStops(String jsonResponse)
             throws JSONException, StopDataMissingException {
         // TODO: Task 4: Implement this method
+        JSONArray jsonArray = new JSONArray(jsonResponse);
+        StringBuilder msg = new StringBuilder();
+
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            int stopNo = 0;
+            try {
+                JSONObject jsonStop = jsonArray.getJSONObject(i);
+                stopNo = jsonStop.getInt("StopNo");
+                String stopName = jsonStop.getString("Name");
+
+                double Lat = jsonStop.getDouble("Latitude");
+                double Lon = jsonStop.getDouble("Longitude");
+                String routes = jsonStop.getString("Routes");
+
+                String[] routeArray = routes.split(", *");
+                Stop s = StopManager.getInstance().getStopWithNumber(stopNo, stopName, new LatLon(Lat, Lon));
+                for (String next : routeArray) {
+                    Route route = RouteManager.getInstance().getRouteWithNumber(next);
+                    s.addRoute(route);
+                }
+            } catch (JSONException e) {
+                msg.append(stopNo != 0 ? stopNo : "Unnumbered route");
+                msg.append(" ");
+            }
+        }
+        if (msg.length() > 0) {
+            throw new StopDataMissingException("Some stops are missing information: " + msg.toString());
+        }
     }
 }

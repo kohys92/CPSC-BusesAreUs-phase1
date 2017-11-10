@@ -1,9 +1,13 @@
 package ca.ubc.cs.cpsc210.translink.parsers;
 
+import ca.ubc.cs.cpsc210.translink.model.Arrival;
+import ca.ubc.cs.cpsc210.translink.model.Route;
+import ca.ubc.cs.cpsc210.translink.model.RouteManager;
 import ca.ubc.cs.cpsc210.translink.model.Stop;
 import ca.ubc.cs.cpsc210.translink.parsers.exception.ArrivalsDataMissingException;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A parser for the data returned by the Translink arrivals at a stop query
@@ -29,6 +33,35 @@ public class ArrivalsParser {
     public static void parseArrivals(Stop stop, String jsonResponse)
             throws JSONException, ArrivalsDataMissingException {
         // TODO: Task 4: Implement this method
+
+        JSONArray jsonArray = new JSONArray(jsonResponse);
+        int numberOfArrivalAdded = 0;
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                // This should be a route arrival, with RouteNo, Direction, RouteName, and Schedules fields
+                String number = jsonObject.getString("RouteNo");
+                Route route = RouteManager.getInstance().getRouteWithNumber(number);
+                JSONArray jsonArrivals = jsonObject.getJSONArray("Schedules");
+
+                for (int a = 0; a < jsonArrivals.length(); a++) {
+                    JSONObject arrivalObject = jsonArrivals.getJSONObject(a);
+
+                    int timeToStop = arrivalObject.getInt("ExpectedCountdown");
+                    String destination = arrivalObject.getString("Destination");
+                    String status = arrivalObject.getString("ScheduleStatus");
+
+                    Arrival arrival = new Arrival(timeToStop, destination, route);
+                    arrival.setStatus(status);
+                    stop.addArrival(arrival);
+                    numberOfArrivalAdded++;
+                }
+            } catch (JSONException e) {
+                // Nothing
+            }
+        }
+        if (numberOfArrivalAdded == 0) {
+            throw new ArrivalsDataMissingException("No arrivals with complete information");
+        }
     }
 }
-  

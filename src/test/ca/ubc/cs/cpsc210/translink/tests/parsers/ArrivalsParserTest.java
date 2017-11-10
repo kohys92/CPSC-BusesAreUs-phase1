@@ -38,4 +38,24 @@ public class ArrivalsParserTest {
         }
         assertEquals(6, count);
     }
+
+    @Test
+    public void testArrivalsParserNormal2() throws JSONException, ArrivalsDataMissingException {
+        Stop s = StopManager.getInstance().getStopWithNumber(51479);
+        s.clearArrivals();
+        String data = "";
+        try {
+            data = new FileDataProvider("arrivals.json").dataSourceToString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Can't read the arrivals data");
+        }
+        ArrivalsParser.parseArrivals(s, data);
+        int count = 0;
+        for (Arrival a : s) {
+            assertTrue(a.getTimeToStopInMins() <= 120);
+            count++;
+        }
+        assertEquals(40 , count);
+    }
 }

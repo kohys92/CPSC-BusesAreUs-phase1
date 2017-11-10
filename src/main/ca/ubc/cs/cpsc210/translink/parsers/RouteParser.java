@@ -1,9 +1,13 @@
 package ca.ubc.cs.cpsc210.translink.parsers;
 
+import ca.ubc.cs.cpsc210.translink.model.Route;
+import ca.ubc.cs.cpsc210.translink.model.RouteManager;
 import ca.ubc.cs.cpsc210.translink.parsers.exception.RouteDataMissingException;
 import ca.ubc.cs.cpsc210.translink.providers.DataProvider;
 import ca.ubc.cs.cpsc210.translink.providers.FileDataProvider;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -49,5 +53,38 @@ public class RouteParser {
     public void parseRoutes(String jsonResponse)
             throws JSONException, RouteDataMissingException {
         // TODO: Task 4: Implement this method
+        JSONArray jsonArray = new JSONArray(jsonResponse);
+        RouteManager routeManager = RouteManager.getInstance();
+        StringBuilder msg = new StringBuilder();
+
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            String routeNumber = "";
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                routeNumber = jsonObject.getString("RouteNo");
+
+                String routeName = jsonObject.getString("Name");
+                Route route = routeManager.getRouteWithNumber(routeNumber, routeName);
+
+                JSONArray patterns = jsonObject.getJSONArray("Patterns");
+
+                for (int k = 0; k < patterns.length(); k++) {
+                    JSONObject routePattern = patterns.getJSONObject(k);
+
+                    String patternNumber = routePattern.getString("PatternNo");
+                    String patternDestination = routePattern.getString("Destination");
+                    String patternDirection = routePattern.getString("Direction");
+
+                    route.getPattern(patternNumber, patternDestination, patternDirection);
+                }
+
+            } catch (JSONException e) {
+                msg.append(routeNumber.length() > 0 ? routeNumber : "Unnumbered route");
+                msg.append(" ");
+            }
+        }
+
+        if (msg.length() > 0)
+            throw new RouteDataMissingException("Missing required data about routes: " + msg.toString());
     }
 }

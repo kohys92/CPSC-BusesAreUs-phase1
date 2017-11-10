@@ -138,12 +138,12 @@ public class StopManager implements Iterable<Stop> {
      */
     public Stop findNearestTo(LatLon pt) {
         Stop nearStop = null;
-        double radius = RADIUS;
+        double nearDistance = RADIUS;
 
         for(Stop next : stopMap.values()) {
-            double distance = SphericalGeometry.distanceBetween(next.getLocn(), pt);
-            if(distance < radius) {
-                radius = distance;
+            double distance = SphericalGeometry.distanceBetween(pt, next.getLocn());
+            if(distance < nearDistance) {
+                nearDistance = distance;
                 nearStop = next;
             }
         }

@@ -26,5 +26,7 @@ public class ArrivalsTest {
     public void testConstructor() {
         assertEquals(23, a.getTimeToStopInMins());
         assertEquals(r, a.getRoute());
+        assertEquals("Home", a.getDestination());
+        assertEquals(" ", a.getStatus());
     }
 }

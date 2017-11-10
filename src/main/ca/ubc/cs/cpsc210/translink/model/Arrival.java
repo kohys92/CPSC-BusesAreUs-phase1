@@ -7,7 +7,6 @@ package ca.ubc.cs.cpsc210.translink.model;
  */
 // TODO: Task 2: Complete all the methods in this class
 public class Arrival implements Comparable<Arrival>{
-
     private Route route;
     private int timeToStop;
     private String destination;
@@ -25,7 +24,7 @@ public class Arrival implements Comparable<Arrival>{
         this.route = route;
         this.timeToStop = timeToStop;
         this.destination = destination;
-        status = " ";
+        this.status = " ";
     }
 
     /**

@@ -6,6 +6,9 @@ import ca.ubc.cs.cpsc210.translink.util.LatLon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -24,5 +27,10 @@ public class StopManagerTest {
         Stop s9999 = new Stop(9999, "My house", new LatLon(-49.2, 123.2));
         Stop r = StopManager.getInstance().getStopWithNumber(9999);
         assertEquals(s9999, r);
+    }
+
+    @Test
+    public void testSetSelected() {
+        
     }
 }

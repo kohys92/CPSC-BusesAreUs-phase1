@@ -2,6 +2,7 @@ package ca.ubc.cs.cpsc210.translink.model;
 
 import ca.ubc.cs.cpsc210.translink.util.LatLon;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class RoutePattern {
         this.destination = destination;
         this.direction = direction;
         this.route = route;
+        path = new ArrayList<>();
     }
 
     /**
