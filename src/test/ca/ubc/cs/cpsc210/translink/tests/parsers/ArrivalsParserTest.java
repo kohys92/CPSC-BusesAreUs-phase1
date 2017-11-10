@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -58,4 +59,5 @@ public class ArrivalsParserTest {
         }
         assertEquals(40 , count);
     }
+
 }
