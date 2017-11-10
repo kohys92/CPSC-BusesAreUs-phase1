@@ -8,6 +8,7 @@ import ca.ubc.cs.cpsc210.translink.providers.FileDataProvider;
 import ca.ubc.cs.cpsc210.translink.util.LatLon;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,16 +44,27 @@ public class RouteMapParser {
 
     /**
      * Parse one route pattern, adding it to the route that is named within it
-     * @param str
      *
-     * Each line begins with a capital N, which is not part of the route number, followed by the
-     * bus route number, a dash, the pattern name, a semicolon, and a series of 0 or more real
-     * numbers corresponding to the latitude and longitude (in that order) of a point in the pattern,
-     * separated by semicolons. The 'N' that marks the beginning of the line is not part of the bus
-     * route number.
+     * @param str Each line begins with a capital N, which is not part of the route number, followed by the
+     *            bus route number, a dash, the pattern name, a semicolon, and a series of 0 or more real
+     *            numbers corresponding to the latitude and longitude (in that order) of a point in the pattern,
+     *            separated by semicolons. The 'N' that marks the beginning of the line is not part of the bus
+     *            route number.
      */
     private void parseOnePattern(String str) {
-        // TODO: Task 3: Implement this method
+        String[] info = str.split(";");
+        // NOTE: split(regex, limit) because PatternName may contain "-"
+        String[] routeAndPattern = info[0].substring(1).split("-", 2);
+        String routeNo = routeAndPattern[0];
+        String patternName = routeAndPattern[1];
+
+        List<LatLon> elements = new ArrayList<>();
+
+        for (int i = 1; i < info.length; i = i + 2) {
+            LatLon latlon = new LatLon(Double.parseDouble(info[i]), Double.parseDouble(info[i + 1]));
+            elements.add(latlon);
+        }
+        storeRouteMap(routeNo, patternName, elements);
     }
 
     /**
@@ -60,9 +72,9 @@ public class RouteMapParser {
      * Your parser should call this method to insert each route pattern into the corresponding route object
      * There should be no need to change this method
      *
-     * @param routeNumber       the number of the route
-     * @param patternName       the name of the pattern
-     * @param elements          the coordinate list of the pattern
+     * @param routeNumber the number of the route
+     * @param patternName the name of the pattern
+     * @param elements    the coordinate list of the pattern
      */
     private void storeRouteMap(String routeNumber, String patternName, List<LatLon> elements) {
         Route r = RouteManager.getInstance().getRouteWithNumber(routeNumber);

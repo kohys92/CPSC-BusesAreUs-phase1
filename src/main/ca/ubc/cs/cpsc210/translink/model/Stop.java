@@ -74,7 +74,9 @@ public class Stop implements Iterable<Arrival> {
      * @param route  the route to add
      */
     public void addRoute(Route route) {
+        if(!routes.contains(route))
         routes.add(route);
+        route.addStop(this);
     }
 
     /**
@@ -83,7 +85,9 @@ public class Stop implements Iterable<Arrival> {
      * @param route the route to remove
      */
     public void removeRoute(Route route) {
+        if(!routes.contains(route))
         routes.remove(route);
+        route.removeStop(this);
     }
 
     /**

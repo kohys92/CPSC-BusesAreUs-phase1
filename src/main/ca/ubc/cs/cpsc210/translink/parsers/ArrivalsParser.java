@@ -2,6 +2,7 @@ package ca.ubc.cs.cpsc210.translink.parsers;
 
 import ca.ubc.cs.cpsc210.translink.model.Stop;
 import ca.ubc.cs.cpsc210.translink.parsers.exception.ArrivalsDataMissingException;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 /**
