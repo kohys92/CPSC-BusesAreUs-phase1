@@ -31,6 +31,6 @@ public class StopManagerTest {
 
     @Test
     public void testSetSelected() {
-        
+
     }
 }
