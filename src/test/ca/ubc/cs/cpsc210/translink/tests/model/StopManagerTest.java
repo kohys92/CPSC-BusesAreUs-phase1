@@ -30,7 +30,8 @@ public class StopManagerTest {
     }
 
     @Test
-    public void testSetSelected() {
+    public void testSelected() {
+        Stop s9999 = new Stop(9999, "My house", new LatLon(-49.2, 123.2));
 
     }
 }
