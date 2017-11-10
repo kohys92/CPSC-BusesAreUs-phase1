@@ -31,3 +31,4 @@ public class ArrivalsParser {
         // TODO: Task 4: Implement this method
     }
 }
+  
