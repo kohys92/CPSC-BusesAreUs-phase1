@@ -1,8 +1,10 @@
 package ca.ubc.cs.cpsc210.translink.tests.parsers;
 
+import ca.ubc.cs.cpsc210.translink.model.RouteManager;
 import ca.ubc.cs.cpsc210.translink.model.Stop;
 import ca.ubc.cs.cpsc210.translink.model.StopManager;
 import ca.ubc.cs.cpsc210.translink.parsers.BusParser;
+import ca.ubc.cs.cpsc210.translink.parsers.RouteMapParser;
 import ca.ubc.cs.cpsc210.translink.parsers.RouteParser;
 import ca.ubc.cs.cpsc210.translink.parsers.StopParser;
 import ca.ubc.cs.cpsc210.translink.parsers.exception.RouteDataMissingException;
@@ -38,5 +40,27 @@ public class BusParserTest {
         BusParser.parseBuses(s, data);
 
         assertEquals(4, s.getBuses().size());
+    }
+
+    @Test
+    public void testBusLocationRoute() throws JSONException {
+        Stop stop = StopManager.getInstance().getStopWithNumber(51479);
+        stop.addRoute(RouteManager.getInstance().getRouteWithNumber("004"));
+        stop.addRoute(RouteManager.getInstance().getRouteWithNumber("014"));
+        stop.clearBuses();
+        String info = "";
+
+        try{
+            info = new FileDataProvider("busRouteException.json").dataSourceToString();
+        }catch (IOException e){
+            e.printStackTrace();
+            throw new RuntimeException("Can't read the bus locations data");
+        }
+
+        BusParser.parseBuses(stop, info);
+
+        assertEquals(3, stop.getBuses().size());
+
+
     }
 }
