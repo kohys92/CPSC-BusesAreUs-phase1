@@ -92,10 +92,10 @@ public class Stop implements Iterable<Arrival> {
      * @param route the route to remove
      */
     public void removeRoute(Route route) {
-        if (routes.contains(route))
+        if (routes.contains(route)) {
             routes.remove(route);
-        route.removeStop(this);
-
+            route.removeStop(this);
+        }
     }
 
     /**

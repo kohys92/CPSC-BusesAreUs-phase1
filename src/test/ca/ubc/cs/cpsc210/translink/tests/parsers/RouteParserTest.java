@@ -2,9 +2,7 @@ package ca.ubc.cs.cpsc210.translink.tests.parsers;
 
 import ca.ubc.cs.cpsc210.translink.model.RouteManager;
 import ca.ubc.cs.cpsc210.translink.parsers.RouteParser;
-import ca.ubc.cs.cpsc210.translink.parsers.StopParser;
 import ca.ubc.cs.cpsc210.translink.parsers.exception.RouteDataMissingException;
-import ca.ubc.cs.cpsc210.translink.parsers.exception.StopDataMissingException;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

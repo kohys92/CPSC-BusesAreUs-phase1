@@ -79,9 +79,10 @@ public class Route implements Iterable<Stop> {
      * @param stop the stop to remove from this route
      */
     public void removeStop(Stop stop) {
-        if (stops.contains(stop)) ;
-        stops.remove(stop);
-        stop.removeRoute(this);
+        if (stops.contains(stop)) {
+            stops.remove(stop);
+            stop.removeRoute(this);
+        }
     }
 
     /**
